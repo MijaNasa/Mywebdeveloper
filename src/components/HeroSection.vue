@@ -68,7 +68,11 @@
     </div>
     
     <!-- Scroll Indicator -->
-    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+    <div
+      @click="scrollToNextSection"
+      class="absolute bottom-8 cursor-pointer left-1/2 transform -translate-x-1/2 animate-bounce focus:outline-none"
+      aria-label="Desplazarse hacia abajo"
+    > 
       <svg class="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
       </svg>
@@ -87,6 +91,12 @@ defineProps({
   whatsappMessage: String
 })
 
+const scrollToNextSection = () => {
+  const nextSection = document.querySelector('#servicios')
+  if (nextSection) {
+    nextSection.scrollIntoView({ behavior: 'smooth' })
+  }
+}
 const techStack = ref([
   'Laravel', 'Vue.js', 'Inertia.js', 'Tailwind CSS', 'MySQL', 'PHP'
 ])
