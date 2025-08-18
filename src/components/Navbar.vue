@@ -1,5 +1,12 @@
 <template>
+  
   <nav class="bg-gray-900/95 backdrop-blur-sm sticky top-0 z-50 border-b border-gray-800 shadow-lg">
+    <!-- BZH Badge -->
+    <div class="absolute top-1 right-6 z-20">
+      <div class="relative">
+        <span class="text-xs text-gray-400 font-mono">בס״ד</span>
+      </div>
+    </div>
     <div class="container mx-auto px-4">
       <div class="flex justify-between items-center py-4">
         <!-- Logo -->
@@ -71,6 +78,8 @@
         </div>
       </div>
     </div>
+     
+    
   </nav>
 </template>
 
