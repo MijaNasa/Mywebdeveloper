@@ -84,7 +84,7 @@
                   <p class="text-gray-800 font-medium mb-2">{{ challenge.text }}</p>
                   <textarea
                     v-model="challenge.response"
-                    placeholder="Describe la foto o cuenta cómo fue..."
+                    placeholder="Una vez tengas la foto, guardala y marca como completado el desafio. Al final, envia todas las fotos"
                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500 text-sm"
                     rows="2"
                   ></textarea>
