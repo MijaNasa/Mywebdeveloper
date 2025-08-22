@@ -1,138 +1,362 @@
 <template>
-  <div class="min-h-screen min-w-screen bg-gradient-to-br from-gray-50 to-gray-100 font-sans antialiased">
-    <!-- Navbar -->
-    <Navbar class="min-w-screen"
-      :whatsappNumber="contactData.whatsappNumber"
-      :whatsappMessage="contactData.whatsappMessage"
-    />
-    
-    <!-- Hero Section -->
-    <HeroSection 
-      :title="heroData.title"
-      :subtitle="heroData.subtitle"
-      :backgroundImage="heroData.backgroundImage"
-      :whatsappNumber="contactData.whatsappNumber"
-      :whatsappMessage="contactData.whatsappMessage"
-    />
-    
-    <!-- Info Section -->
-    <InfoSection 
-      :title="infoData.title"
-      :description="infoData.description"
-      :services="infoData.services"
-      :image="infoData.image"
-      :whatsappNumber="contactData.whatsappNumber"
-      :whatsappMessage="contactData.whatsappMessage"
-    />
-    
-    <!-- Testimonials Section -->
-    <TestimonialsSection :testimonials="testimonialsData" />
-    
-    <!-- Final CTA Section -->
-    <FinalCTASection 
-      :title="ctaData.title"
-      :subtitle="ctaData.subtitle"
-      :whatsappNumber="contactData.whatsappNumber"
-      :whatsappMessage="contactData.whatsappMessage"
-    />
-    
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-8 relative overflow-hidden">
-      <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgcGF0dGVyblRyYW5zZm9ybT0icm90YXRlKDQ1KSI+PHJlY3Qgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiBmaWxsPSJ0cmFuc3BhcmVudCI+PC9yZWN0PjxyZWN0IHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjA1KSI+PC9yZWN0PjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuKSI+PC9yZWN0Pjwvc3ZnPg==')] opacity-10"></div>
-      <div class="container mx-auto px-4 text-center relative z-10">
-        <p class="text-gray-300">&copy; 2025 Mijael Nasatsky - Desarrollador Web. Todos los derechos reservados.</p>
-        <p class="text-gray-500 text-sm mt-2">Rosario, Argentina</p>
+  <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+    <div class="max-w-4xl mx-auto">
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-indigo-900 mb-2">🏆 Cacería del Tesoro</h1>
+        <p class="text-lg text-indigo-700">Completa todos los desafíos y gana!</p>
       </div>
-    </footer>
-    
-    <!-- WhatsApp Floating Button -->
-    <WhatsAppButton 
-      :whatsappNumber="contactData.whatsappNumber"
-      :whatsappMessage="contactData.whatsappMessage"
-    />
+
+      <!-- Participant Name -->
+      <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <label class="block text-sm font-medium text-gray-700 mb-2">
+          Nombre del participante:
+        </label>
+        <input
+          v-model="participantName"
+          type="text"
+          placeholder="Ingresa tu nombre completo"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+        />
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <div class="flex justify-between items-center mb-2">
+          <span class="text-sm font-medium text-gray-700">Progreso</span>
+          <span class="text-sm text-gray-500">{{ completedChallenges }}/{{ totalChallenges }}</span>
+        </div>
+        <div class="w-full bg-gray-200 rounded-full h-3">
+          <div 
+            class="bg-gradient-to-r from-green-400 to-green-600 h-3 rounded-full transition-all duration-300"
+            :style="{ width: progressPercentage + '%' }"
+          ></div>
+        </div>
+      </div>
+
+      <!-- Challenge Categories -->
+      <div class="space-y-6">
+        <!-- Conversación -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+          <div class="bg-gradient-to-r from-purple-500 to-purple-600 px-6 py-4">
+            <h2 class="text-xl font-bold text-white flex items-center">
+              💬 Desafíos de conversación
+            </h2>
+          </div>
+          <div class="p-6 space-y-4">
+            <div v-for="(challenge, index) in conversationChallenges" :key="index" class="challenge-item">
+              <div class="flex items-start space-x-3">
+                <input
+                  v-model="challenge.completed"
+                  type="checkbox"
+                  class="mt-1 h-5 w-5 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
+                />
+                <div class="flex-1">
+                  <p class="text-gray-800 font-medium mb-2">{{ challenge.text }}</p>
+                  <textarea
+                    v-model="challenge.response"
+                    placeholder="Escribe tu respuesta aquí..."
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-sm"
+                    rows="2"
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fotos/Selfies -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+          <div class="bg-gradient-to-r from-pink-500 to-pink-600 px-6 py-4">
+            <h2 class="text-xl font-bold text-white flex items-center">
+              📸 Desafíos con fotos / selfies
+            </h2>
+          </div>
+          <div class="p-6 space-y-4">
+            <div v-for="(challenge, index) in photoChallenges" :key="index" class="challenge-item">
+              <div class="flex items-start space-x-3">
+                <input
+                  v-model="challenge.completed"
+                  type="checkbox"
+                  class="mt-1 h-5 w-5 text-pink-600 focus:ring-pink-500 border-gray-300 rounded"
+                />
+                <div class="flex-1">
+                  <p class="text-gray-800 font-medium mb-2">{{ challenge.text }}</p>
+                  <textarea
+                    v-model="challenge.response"
+                    placeholder="Describe la foto o cuenta cómo fue..."
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500 text-sm"
+                    rows="2"
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Divertidos/Acción -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+          <div class="bg-gradient-to-r from-orange-500 to-orange-600 px-6 py-4">
+            <h2 class="text-xl font-bold text-white flex items-center">
+              🎲 Desafíos divertidos / de acción
+            </h2>
+          </div>
+          <div class="p-6 space-y-4">
+            <div v-for="(challenge, index) in actionChallenges" :key="index" class="challenge-item">
+              <div class="flex items-start space-x-3">
+                <input
+                  v-model="challenge.completed"
+                  type="checkbox"
+                  class="mt-1 h-5 w-5 text-orange-600 focus:ring-orange-500 border-gray-300 rounded"
+                />
+                <div class="flex-1">
+                  <p class="text-gray-800 font-medium mb-2">{{ challenge.text }}</p>
+                  <textarea
+                    v-model="challenge.response"
+                    placeholder="Cuenta cómo fue la experiencia..."
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-sm"
+                    rows="2"
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Búsqueda -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+          <div class="bg-gradient-to-r from-green-500 to-green-600 px-6 py-4">
+            <h2 class="text-xl font-bold text-white flex items-center">
+              🕵 Desafíos de búsqueda
+            </h2>
+          </div>
+          <div class="p-6 space-y-4">
+            <div v-for="(challenge, index) in searchChallenges" :key="index" class="challenge-item">
+              <div class="flex items-start space-x-3">
+                <input
+                  v-model="challenge.completed"
+                  type="checkbox"
+                  class="mt-1 h-5 w-5 text-green-600 focus:ring-green-500 border-gray-300 rounded"
+                />
+                <div class="flex-1">
+                  <p class="text-gray-800 font-medium mb-2">{{ challenge.text }}</p>
+                  <textarea
+                    v-model="challenge.response"
+                    placeholder="Escribe lo que descubriste..."
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm"
+                    rows="2"
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div v-if="allChallengesCompleted" class="mt-8 text-center">
+        <button
+          @click="sendToWhatsApp"
+          class="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-4 px-8 rounded-lg text-lg shadow-lg transform hover:scale-105 transition-all duration-200"
+        >
+          🎉 ¡Enviar por WhatsApp! 🎉
+        </button>
+        <p class="text-sm text-gray-600 mt-2">¡Felicitaciones! Has completado todos los desafíos</p>
+      </div>
+
+      <!-- Footer -->
+      <div class="text-center mt-12 text-gray-500 text-sm">
+        <p>¡Diviértete y conoce gente nueva! 🌟</p>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import WhatsAppButton from './components/WhatsAppButton.vue'
-import HeroSection from './components/HeroSection.vue'
-import InfoSection from './components/InfoSection.vue'
-import TestimonialsSection from './components/TestimonialsSection.vue'
-import FinalCTASection from './components/FinalCTASection.vue'
-import Navbar from './components/Navbar.vue'
+import { ref, computed } from 'vue'
 
-// 🚀 Hero adaptado a desarrollo web
-const heroData = ref({
-  title: "Desarrollo web profesional",
-  subtitle: "Transformo tus ideas en sitios web modernos y funcionales",
-  backgroundImage: "/placeholder.svg?height=600&width=1200"
-})
+const participantName = ref('')
 
-// 📞 Datos de contacto
-const contactData = ref({
-  whatsappNumber: "5493412114056", // Número de WhatsApp actualizado
-  whatsappMessage: "Hola, quiero solicitar un presupuesto para mi proyecto web"
-})
-
-// 💻 Sección informativa sobre desarrollo web
-const infoData = ref({
-  title: "Desarrollador Web Full Stack especializado en Laravel y Vue.js",
-  description: "Con 4 años de experiencia en desarrollo web, me especializo en crear soluciones digitales modernas y eficientes. Desde sitios web corporativos hasta sistemas personalizados, trabajo con las últimas tecnologías para llevar tu proyecto al siguiente nivel.",
-  services: [
-    "Sitios web profesionales y landing pages",
-    "Sistemas web personalizados con Laravel",
-    "Aplicaciones SPA con Vue.js e Inertia.js",
-    "E-commerce y tiendas online",
-    "Optimización y mantenimiento web",
-    "Integración de APIs y servicios externos"
-  ],
-  image: "/placeholder.svg?height=400&width=600"
-})
-
-// 🌟 Testimonios de clientes
-const testimonialsData = ref([
+const conversationChallenges = ref([
   {
-    name: "Carlos Mendoza",
-    text: "Mijael desarrolló nuestra tienda online y superó todas nuestras expectativas. Muy profesional y cumplió todos los plazos.",
-    rating: 5
+    text: 'Encuentra a alguien que no sea de tu ciudad y pregúntale qué lo trajo al evento.',
+    completed: false,
+    response: ''
   },
   {
-    name: "Ana Rodriguez",
-    text: "El sistema de gestión que nos creó optimizó completamente nuestros procesos. Excelente trabajo y soporte post-entrega.",
-    rating: 5
+    text: 'Habla con alguien sobre su comida judía favorita y anótala en tu lista.',
+    completed: false,
+    response: ''
   },
   {
-    name: "Roberto Silva",
-    text: "Nuestro sitio web quedó increíble y es súper rápido. Mijael es muy detallista y sabe lo que hace.",
-    rating: 5
+    text: 'Descubre quién fue a Israel y pregúntale qué lugar le gustó más.',
+    completed: false,
+    response: ''
+  },
+  {
+    text: 'Averigua el segundo nombre de tres personas diferentes.',
+    completed: false,
+    response: ''
+  },
+  {
+    text: 'Encuentra a alguien que haya participado en un campamento o viaje judío y pregúntale cómo fue su experiencia.',
+    completed: false,
+    response: ''
   }
 ])
 
-// 🎯 CTA final
-const ctaData = ref({
-  title: "¿Listo para llevar tu proyecto al siguiente nivel?",
-  subtitle: "Solicita tu presupuesto gratuito y sin compromiso. Te respondo en menos de 24 horas."
-})
+const photoChallenges = ref([
+  {
+    text: 'Sacate una selfie con dos personas que no conocías antes del evento.',
+    completed: false,
+    response: ''
+  },
+  {
+    text: 'Sacate una foto grupal con al menos 5 personas de distintas ciudades.',
+    completed: false,
+    response: ''
+  },
+  {
+    text: 'Hacé una foto divertida imitando una escena de Shabat o Jag.',
+    completed: false,
+    response: ''
+  },
+  {
+    text: 'Selfie con alguien que tenga tu misma inicial en el nombre.',
+    completed: false,
+    response: ''
+  },
+  {
+    text: 'Selfie con alguien que tenga un accesorio llamativo (gorra, pulsera, collar, etc.).',
+    completed: false,
+    response: ''
+  }
+])
+
+const actionChallenges = ref([
+  {
+    text: 'Jugá una partida rápida de cartas o un mini-juego con alguien nuevo.',
+    completed: false,
+    response: ''
+  },
+  {
+    text: 'Contale un chiste a alguien y anotá si se rió.',
+    completed: false,
+    response: ''
+  },
+  {
+    text: 'Enseñale una palabra en otro idioma a alguien y aprendé una de ellos.',
+    completed: false,
+    response: ''
+  },
+  {
+    text: 'Intercambiá un objeto pequeño (ej. pulsera, lapicera, gorrita) con alguien.',
+    completed: false,
+    response: ''
+  },
+  {
+    text: 'Encontrá a alguien que sepa bailar rikudim y pedile que te enseñe un paso.',
+    completed: false,
+    response: ''
+  }
+])
+
+const searchChallenges = ref([
+  {
+    text: 'Encontrá a alguien que haya nacido el mismo mes que vos.',
+    completed: false,
+    response: ''
+  },
+  {
+    text: 'Encontrá a alguien que tenga el mismo hobby que vos.',
+    completed: false,
+    response: ''
+  },
+  {
+    text: 'Encontrá a alguien que sepa tocar un instrumento y pedile que te lo muestre (o te lo cuente).',
+    completed: false,
+    response: ''
+  },
+  {
+    text: 'Descubrí quién tiene más hermanos/as en el grupo.',
+    completed: false,
+    response: ''
+  },
+  {
+    text: 'Encontrá a alguien que haya leído el mismo libro o visto la misma serie que vos.',
+    completed: false,
+    response: ''
+  }
+])
+
+const allChallenges = computed(() => [
+  ...conversationChallenges.value,
+  ...photoChallenges.value,
+  ...actionChallenges.value,
+  ...searchChallenges.value
+])
+
+const totalChallenges = computed(() => allChallenges.value.length)
+
+const completedChallenges = computed(() => 
+  allChallenges.value.filter(challenge => challenge.completed).length
+)
+
+const progressPercentage = computed(() => 
+  totalChallenges.value > 0 ? (completedChallenges.value / totalChallenges.value) * 100 : 0
+)
+
+const allChallengesCompleted = computed(() => 
+  completedChallenges.value === totalChallenges.value && participantName.value.trim() !== ''
+)
+
+const sendToWhatsApp = () => {
+  if (!participantName.value.trim()) {
+    alert('Por favor ingresa tu nombre antes de enviar')
+    return
+  }
+
+  let message = `🏆 CACERÍA DEL TESORO COMPLETADA 🏆\n\n`
+  message += `Participante: ${participantName.value}\n\n`
+
+  message += `💬 DESAFÍOS DE CONVERSACIÓN:\n`
+  conversationChallenges.value.forEach((challenge, index) => {
+    message += `${index + 1}. ${challenge.text}\n`
+    message += `Respuesta: ${challenge.response || 'Sin respuesta'}\n\n`
+  })
+
+  message += `📸 DESAFÍOS CON FOTOS/SELFIES:\n`
+  photoChallenges.value.forEach((challenge, index) => {
+    message += `${index + 1}. ${challenge.text}\n`
+    message += `Respuesta: ${challenge.response || 'Sin respuesta'}\n\n`
+  })
+
+  message += `🎲 DESAFÍOS DIVERTIDOS/DE ACCIÓN:\n`
+  actionChallenges.value.forEach((challenge, index) => {
+    message += `${index + 1}. ${challenge.text}\n`
+    message += `Respuesta: ${challenge.response || 'Sin respuesta'}\n\n`
+  })
+
+  message += `🕵 DESAFÍOS DE BÚSQUEDA:\n`
+  searchChallenges.value.forEach((challenge, index) => {
+    message += `${index + 1}. ${challenge.text}\n`
+    message += `Respuesta: ${challenge.response || 'Sin respuesta'}\n\n`
+  })
+
+  const phoneNumber = '5493412114056'
+  const encodedMessage = encodeURIComponent(message)
+  const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`
+  
+  window.open(whatsappUrl, '_blank')
+}
 </script>
 
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
-/* Prevent horizontal scrolling */
-html, body {
-  max-width: 100%;
-  overflow-x: hidden;
+<style scoped>
+.challenge-item {
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
 }
 
-/* Ensure all elements stay within viewport */
-* {
-  box-sizing: border-box;
-}
 
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
 </style>
